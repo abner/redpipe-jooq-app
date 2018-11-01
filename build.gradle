@@ -43,9 +43,8 @@ dependencies {
     compile 'net.redpipe:redpipe-cdi:0.0.4'
     compile 'net.redpipe:redpipe-fibers:0.0.4'
     
-     // compile 'io.reactivex.rxjava2:rxjava:2.1.14'
-compile 'org.reflections:reflections:0.9.11'
-
+    // compile 'io.reactivex.rxjava2:rxjava:2.1.14'
+    compile 'org.reflections:reflections:0.9.11'
     compile 'org.jboss.weld.se:weld-se-core:3.0.5.Final'
 
     compile 'org.apache.logging.log4j:log4j-api:2.11.0'
@@ -115,9 +114,9 @@ jooq {
   irpf(sourceSets.main) {
     jdbc {
       driver = 'org.postgresql.Driver'
-      url = 'jdbc:postgresql://localhost:5432/irpfonline'
-      user = 'irpfonline'
-      password = 'irpfonline'
+      url = 'jdbc:postgresql://127.0.0.1:5432/mydb'
+      user = 'myuser'
+      password = 'password'
       properties {
         // property {
         //   key = 'ssl'

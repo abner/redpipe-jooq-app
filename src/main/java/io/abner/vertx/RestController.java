@@ -11,7 +11,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import io.abner.vertx.jooq.tables.pojos.Declaracao;
 import io.reactivex.Single;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;

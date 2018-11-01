@@ -1,0 +1,19 @@
+{
+	"http_port": 9090,
+	"db_host": "0.0.0.0",
+	"db_port": 5432,
+	"db_name": "my-database",
+    "db_driver": "org.postgresql.Driver",
+	"db_user": "username",
+	"db_pass": "password",
+	"db_max_pool_size": 30,
+	"security_definitions": "classpath:wiki-users.properties",
+	"scan": [
+		"io.abner.vertx"
+	],
+	"keystore": {
+		"path": "keystore.jceks",
+		"type": "jceks",
+		"password": "secret"
+	}
+}

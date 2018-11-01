@@ -24,18 +24,21 @@ public class Main extends AbstractVerticle {
         Server redpipeServer = new Server() {
             @Override
             protected SQLClient createDbClient(JsonObject config) {
+                System.out.println("CONFIG ---- " + config.encode());
                 JsonObject myConfig = new JsonObject();
                 if(config.containsKey("db_host"))
                     myConfig.put("host", config.getString("db_host"));
                 if(config.containsKey("db_port"))
                     myConfig.put("port", config.getInteger("db_port"));
                 if(config.containsKey("db_user"))
-                    myConfig.put("username", config.getString("db_user"));
+                    myConfig.put("user", config.getString("db_user"));
                 if(config.containsKey("db_pass"))
                     myConfig.put("password", config.getString("db_pass"));
                 if(config.containsKey("db_name"))
                     myConfig.put("database", config.getString("db_name"));
-                myConfig.put("max_pool_size", config.getInteger("db_max_pool_size", 30));
+                myConfig.put("maxSize", config.getInteger("db_max_pool_size", 30));
+
+                System.out.println("MYCONFIG ----- " + myConfig.encode());
                 
                 Vertx vertx = AppGlobals.get().getVertx();
                 // Pool options

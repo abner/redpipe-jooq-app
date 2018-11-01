@@ -1,0 +1,166 @@
+buildscript {
+  repositories {
+    maven {
+      url "http://plugins.gradle.org/m2/"
+    }
+    jcenter()
+  }
+  dependencies {
+    classpath 'us.kirchmeier:gradle-capsule-plugin:1.0.2'
+     classpath 'nu.studer:gradle-jooq-plugin:3.0.2'
+  }
+}
+
+repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'nu.studer.jooq'
+apply plugin: 'us.kirchmeier.capsule'
+
+ext.mainClass = "io.abner.vertx.Main"
+
+mainClassName = "$project.ext.mainClass"
+
+
+task copyResources(type: Copy) {
+    from "${projectDir}/src/main/resources"
+    into "${buildDir}/classes/java/main"
+}
+
+processResources.dependsOn copyResources
+
+task fatCapsule(type: FatCapsule) {
+  applicationClass "$project.ext.mainClass"
+}
+
+dependencies {
+    compile 'net.redpipe:redpipe-cdi:0.0.4'
+    compile 'net.redpipe:redpipe-fibers:0.0.4'
+    
+     // compile 'io.reactivex.rxjava2:rxjava:2.1.14'
+compile 'org.reflections:reflections:0.9.11'
+
+    compile 'org.jboss.weld.se:weld-se-core:3.0.5.Final'
+
+    compile 'org.apache.logging.log4j:log4j-api:2.11.0'
+    compile 'org.apache.logging.log4j:log4j-core:2.11.0'
+
+
+    // compile group: 'org.jboss.resteasy', name: 'resteasy-rxjava2', version: '4.0.0.Beta5'
+
+    // postgresql
+    // compile 'org.postgresql:postgresql:42.1.4'
+    compile('io.reactiverse:reactive-pg-client:0.10.6') {
+        exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
+
+    }
+    // compile 'io.github.jklingsporn:vertx-jooq-rx-async:4.0.0'
+    compile ('org.jooq:jooq') {
+        exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
+
+    }
+    compile ('io.github.jklingsporn:vertx-jooq-rx-reactive:4.0.0') {
+        exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
+        exclude group: 'io.vertx', module: 'vertx-rx-java2'
+    }
+    jooqRuntime 'org.postgresql:postgresql:42.1.4'
+
+    jooqRuntime('io.github.jklingsporn:vertx-jooq-rx-async:4.0.0') {
+        exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
+        exclude group: 'io.vertx', module: 'vertx-rx-java2'
+
+    }
+    // compile 'io.github.jklingsporn:vertx-jooq-rx-async:4.0.0'
+    jooqRuntime('io.github.jklingsporn:vertx-jooq-generate:4.0.0') {
+        exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
+
+    }
+
+//     compile "org.jboss.resteasy:resteasy-jaxrs:4.0.0.Beta5"
+// compile "org.jboss.resteasy:resteasy-validator-provider-11:4.0.0.Beta5"
+// compile "org.jboss.resteasy:resteasy-jackson2-provider:4.0.0.Beta5"
+// compile "org.jboss.resteasy:resteasy-cdi:4.0.0.Beta5"
+// compile "org.jboss.resteasy:resteasy-vertx:4.0.0.Beta5"
+// compile "org.jboss.resteasy:resteasy-rxjava:4.0.0.Beta5"
+// compile "org.jboss.resteasy:resteasy-rxjava2:4.0.0.Beta5"
+
+compile "io.vertx:vertx-core:3.5.1"
+compile "io.vertx:vertx-config:3.5.1"
+compile "io.vertx:vertx-jdbc-client:3.5.1"
+compile "io.vertx:vertx-rx-java:3.5.1"
+compile "io.vertx:vertx-rx-java2:3.5.1"
+compile "io.vertx:vertx-web-client:3.5.1"
+compile "io.vertx:vertx-web:3.5.1"
+compile "io.vertx:vertx-auth-common:3.5.1"
+compile "io.vertx:vertx-auth-shiro:3.5.1"
+compile "io.vertx:vertx-auth-jwt:3.5.1"
+compile "io.vertx:vertx-auth-oauth2:3.5.1"
+compile "io.vertx:vertx-web-templ-freemarker:3.5.1"
+compile "io.vertx:vertx-hazelcast:3.5.1"
+compile "io.vertx:vertx-mail-client:3.5.1"
+
+}
+
+
+jooq {
+  version = '3.11.5' // the default (can be omitted)
+  edition = 'OSS'    // the default (can be omitted), other allowed values are PRO, PRO_JAVA_6, and TRIAL
+
+  irpf(sourceSets.main) {
+    jdbc {
+      driver = 'org.postgresql.Driver'
+      url = 'jdbc:postgresql://localhost:5432/irpfonline'
+      user = 'irpfonline'
+      password = 'irpfonline'
+      properties {
+        // property {
+        //   key = 'ssl'
+        //   value = 'true'
+        // }
+      }
+    }
+    generator {
+      name = 'io.github.jklingsporn.vertx.jooq.generate.rx.RXReactiveVertxGenerator'
+      strategy {
+        name = 'io.github.jklingsporn.vertx.jooq.generate.VertxGeneratorStrategy'
+        // ...
+      }
+      database {
+        name = 'org.jooq.meta.postgres.PostgresDatabase'
+        inputSchema = 'public'
+        forcedTypes {
+          forcedType {
+            name = 'varchar'
+            expression = '.*'
+            types = 'JSONB?'
+          }
+          forcedType {
+            name = 'varchar'
+            expression = '.*'
+            types = 'INET'
+          }
+        }
+        // ...
+      }
+      generate {
+        relations = true
+        deprecated = false
+        records = true
+        immutablePojos = false
+        fluentSetters = true
+        daos = true
+        // ...
+      }
+      target {
+        packageName = 'io.abner.vertx.jooq'
+        // directory = ...
+      }
+    }
+  }
+}

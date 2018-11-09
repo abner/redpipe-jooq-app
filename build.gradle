@@ -39,7 +39,6 @@ ext.mainClass = "io.abner.vertx.Main"
 
 mainClassName = "$project.ext.mainClass"
 
-
 task copyResources(type: Copy) {
     from "${projectDir}/src/main/resources"
     into "${buildDir}/classes/java/main"
@@ -54,11 +53,9 @@ task fatCapsule(type: FatCapsule) {
 dependencies {
     compile 'net.redpipe:redpipe-cdi:0.0.4'
     compile 'net.redpipe:redpipe-fibers:0.0.4'
-    
-     // compile 'io.reactivex.rxjava2:rxjava:2.1.14'
-compile 'org.reflections:reflections:0.9.11'
+    // compile 'org.reflections:reflections:0.9.11'
 
-    compile 'org.jboss.weld.se:weld-se-core:3.0.5.Final'
+    // compile 'org.jboss.weld.se:weld-se-core:3.0.5.Final'
 
     compile 'org.apache.logging.log4j:log4j-api:2.11.0'
     compile 'org.apache.logging.log4j:log4j-core:2.11.0'
@@ -68,31 +65,31 @@ compile 'org.reflections:reflections:0.9.11'
 
     // postgresql
     // compile 'org.postgresql:postgresql:42.1.4'
-    compile('io.reactiverse:reactive-pg-client:0.10.6') {
+    compile('io.reactiverse:reactive-pg-client:0.10.6') /* {
         exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
 
-    }
+    }*/
     // compile 'io.github.jklingsporn:vertx-jooq-rx-async:4.0.0'
-    compile ('org.jooq:jooq') {
+    compile ('org.jooq:jooq') /*{
         exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
 
-    }
-    compile ('io.github.jklingsporn:vertx-jooq-rx-reactive:4.0.0') {
+    } */
+    compile ('io.github.jklingsporn:vertx-jooq-rx-reactive:4.0.0') /*{
         exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
         exclude group: 'io.vertx', module: 'vertx-rx-java2'
-    }
+    } */
     jooqRuntime 'org.postgresql:postgresql:42.1.4'
 
-    jooqRuntime('io.github.jklingsporn:vertx-jooq-rx-async:4.0.0') {
+    jooqRuntime('io.github.jklingsporn:vertx-jooq-rx-async:4.0.0') /* {
         exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
         exclude group: 'io.vertx', module: 'vertx-rx-java2'
 
-    }
+    } */
     // compile 'io.github.jklingsporn:vertx-jooq-rx-async:4.0.0'
-    jooqRuntime('io.github.jklingsporn:vertx-jooq-generate:4.0.0') {
+    jooqRuntime('io.github.jklingsporn:vertx-jooq-generate:4.0.0') /*{
         exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
 
-    }
+    } */
 
 //     compile "org.jboss.resteasy:resteasy-jaxrs:4.0.0.Beta5"
 // compile "org.jboss.resteasy:resteasy-validator-provider-11:4.0.0.Beta5"
@@ -102,20 +99,20 @@ compile 'org.reflections:reflections:0.9.11'
 // compile "org.jboss.resteasy:resteasy-rxjava:4.0.0.Beta5"
 // compile "org.jboss.resteasy:resteasy-rxjava2:4.0.0.Beta5"
 
-compile "io.vertx:vertx-core:3.5.1"
-compile "io.vertx:vertx-config:3.5.1"
-compile "io.vertx:vertx-jdbc-client:3.5.1"
-compile "io.vertx:vertx-rx-java:3.5.1"
-compile "io.vertx:vertx-rx-java2:3.5.1"
-compile "io.vertx:vertx-web-client:3.5.1"
-compile "io.vertx:vertx-web:3.5.1"
-compile "io.vertx:vertx-auth-common:3.5.1"
-compile "io.vertx:vertx-auth-shiro:3.5.1"
-compile "io.vertx:vertx-auth-jwt:3.5.1"
-compile "io.vertx:vertx-auth-oauth2:3.5.1"
-compile "io.vertx:vertx-web-templ-freemarker:3.5.1"
-compile "io.vertx:vertx-hazelcast:3.5.1"
-compile "io.vertx:vertx-mail-client:3.5.1"
+// compile "io.vertx:vertx-core:3.5.1"
+// compile "io.vertx:vertx-config:3.5.1"
+// compile "io.vertx:vertx-jdbc-client:3.5.1"
+// compile "io.vertx:vertx-rx-java:3.5.1"
+// compile "io.vertx:vertx-rx-java2:3.5.1"
+// compile "io.vertx:vertx-web-client:3.5.1"
+// compile "io.vertx:vertx-web:3.5.1"
+// compile "io.vertx:vertx-auth-common:3.5.1"
+// compile "io.vertx:vertx-auth-shiro:3.5.1"
+// compile "io.vertx:vertx-auth-jwt:3.5.1"
+// compile "io.vertx:vertx-auth-oauth2:3.5.1"
+// compile "io.vertx:vertx-web-templ-freemarker:3.5.1"
+// compile "io.vertx:vertx-hazelcast:3.5.1"
+// compile "io.vertx:vertx-mail-client:3.5.1"
 
 }
 
@@ -147,11 +144,19 @@ jooq {
         name = 'org.jooq.meta.postgres.PostgresDatabase'
         inputSchema = 'public'
         forcedTypes {
-          forcedType {
-            name = 'varchar'
-            expression = '.*'
-            types = 'JSONB?'
-          }
+          // How to bind jsonb to JsonObject -> https://www.jooq.org/doc/3.11/manual/code-generation/custom-data-type-bindings/
+          // forcedType {
+          //   userType = 'io.vertx.core.json.JsonObject'
+          //   converter = 'io.github.jklingsporn.vertx.jooq.shared.JsonObjectConverter'
+          //   expression = 'content'
+          //   types = '.*'
+
+          // }
+          // forcedType {
+          //   name = 'varchar'
+          //   expression = '.*'
+          //   types = 'JSONB?'
+          // }
           forcedType {
             name = 'varchar'
             expression = '.*'
@@ -163,7 +168,7 @@ jooq {
       generate {
         relations = true
         deprecated = false
-        records = true
+        records = false
         immutablePojos = false
         fluentSetters = true
         daos = true

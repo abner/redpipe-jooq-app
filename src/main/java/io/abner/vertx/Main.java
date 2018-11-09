@@ -7,7 +7,6 @@ import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 
 import io.abner.vertx.jooq.tables.daos.DocumentDao;
-//import io.abner.vertx.
 import io.reactiverse.pgclient.PgPoolOptions;
 import io.reactiverse.reactivex.pgclient.PgPool;
 import io.vertx.core.AbstractVerticle;

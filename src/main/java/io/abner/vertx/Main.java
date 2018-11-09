@@ -6,7 +6,8 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 
-import io.abner.vertx.jooq.tables.daos.DeclaracaoDao;
+import io.abner.vertx.jooq.tables.daos.DocumentDao;
+//import io.abner.vertx.
 import io.reactiverse.pgclient.PgPoolOptions;
 import io.reactiverse.reactivex.pgclient.PgPool;
 import io.vertx.core.AbstractVerticle;
@@ -48,13 +49,14 @@ public class Main extends AbstractVerticle {
 
                 Configuration configuration = new DefaultConfiguration().set(SQLDialect.POSTGRES);
                 
-                DeclaracaoDao declaracaoDAO = new DeclaracaoDao(configuration, pgPool);
-
+                
+                
                 DSLContext context  = DSL.using(configuration);
-
+                
                 AppGlobals.get().setGlobal(DSLContext.class, context);
-
-                AppGlobals.get().setGlobal(DeclaracaoDao.class, declaracaoDAO);
+                
+                DocumentDao documentDao = new DocumentDao(configuration, pgPool);
+                AppGlobals.get().setGlobal(DocumentDao.class, documentDao);
 
                 return null;
             }
